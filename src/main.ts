@@ -4,7 +4,7 @@ import * as toolkit from '@actions/github';
 async function run() {
   try {
     const myInput = core.getInput('myInput');
-    const token = core.getInput('token')
+    const token = process.env.GITHUB_TOKEN || ''
     const octokit = new toolkit.GitHub(token)
     const context = toolkit.context
     console.dir(context)
