@@ -17,7 +17,7 @@ async function run() {
         pull_number: pr.number
       })
       console.log('join files')
-      console.dir(files.data.join(','))
+      console.dir(files.data)
     } else {
       console.log('no pr')
     }
