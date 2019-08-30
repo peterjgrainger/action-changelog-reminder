@@ -7,7 +7,20 @@ async function run() {
     const token = process.env.GITHUB_TOKEN || ''
     const octokit = new toolkit.GitHub(token)
     const context = toolkit.context
-    console.dir(context)
+
+    const pr = context.payload.pull_request;
+
+    if(pr) {
+      console.dir(pr.number);
+      const files = await octokit.pulls.listFiles({
+        ...context.repo,
+        pull_number: pr.number
+      })
+      console.log(files.data.join(','))
+    } else {
+      console.log('no pr')
+    }
+    
     core.debug(`Hello ${myInput}`);
   } catch (error) {
     console.log('failed')
