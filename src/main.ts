@@ -16,7 +16,8 @@ async function run() {
         ...context.repo,
         pull_number: pr.number
       })
-      console.log(files.data.join(','))
+      console.log('join files')
+      console.dir(files.data.join(','))
     } else {
       console.log('no pr')
     }
