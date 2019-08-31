@@ -3,38 +3,42 @@ import * as toolkit from '@actions/github';
 
 async function run() {
   try {
-    const myInput = core.getInput('myInput');
-    const token = process.env.GITHUB_TOKEN || ''
-    const octokit = new toolkit.GitHub(token)
-    const context = toolkit.context
+    const octokit = new toolkit.GitHub(token())
+    const pr = toolkit.context.payload.pull_request;
 
-    const pr = context.payload.pull_request;
-
-    if(pr) {
-      console.dir(pr.number);
-      const files = await octokit.pulls.listFiles({
-        ...context.repo,
-        pull_number: pr.number
-      })
-      console.log('join files')
-      const changlelogFiles = files.data.filter(value => /change_log\/next\/*.yml/.test(value.filename))
-      if(changlelogFiles.length === 0) {
-        console.log('creating comment')
-        await octokit.issues.createComment({
-          ...context.repo,
-          issue_number: context.issue.number,
-          body: 'You forget to add a changelog!'
-        })
-      }
+    if(pr && changeLogExists(octokit, pr)) {
+      createComment(octokit)
     } else {
-      console.log('no pr')
+      core.debug('PR or changelog doesn\'t exist');
     }
-    
-    core.debug(`Hello ${myInput}`);
   } catch (error) {
-    console.log('failed')
     core.setFailed(error.message);
   }
+}
+
+async function changeLogExists(octokit, pr) {
+  const files = await octokit.pulls.listFiles({
+    ...toolkit.context.repo,
+    pull_number: pr.number
+  })
+  const changlelogFiles = files.data.filter(value => /change_log\/next\/*.yml/.test(value.filename))
+
+  return changlelogFiles.length === 0
+}
+
+async function createComment(octokit) {
+  await octokit.issues.createComment({
+    ...toolkit.context.repo,
+    issue_number: toolkit.context.issue.number,
+    body: `@${toolkit.context.actor} your pull request is missing a changelog!`
+  })
+}
+
+function token() {
+  const { token } = process.env
+  if(!token) throw ReferenceError('No token defined in the environment variables')
+
+  return token
 }
 
 run();
