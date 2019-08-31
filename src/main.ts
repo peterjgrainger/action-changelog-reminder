@@ -17,7 +17,14 @@ async function run() {
         pull_number: pr.number
       })
       console.log('join files')
-      console.dir(files.data)
+      const changlelogFiles = files.data.filter(value => /change_log\/next\/*.yml/.test(value.filename))
+      if(changlelogFiles.length < 0) {
+        await octokit.issues.createComment({
+          ...context.repo,
+          issue_number: context.issue.number,
+          body: 'You forget to add a changelog!'
+        })
+      }
     } else {
       console.log('no pr')
     }
