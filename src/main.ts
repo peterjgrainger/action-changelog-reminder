@@ -18,7 +18,8 @@ async function run() {
       })
       console.log('join files')
       const changlelogFiles = files.data.filter(value => /change_log\/next\/*.yml/.test(value.filename))
-      if(changlelogFiles.length < 0) {
+      if(changlelogFiles.length === 0) {
+        console.log('creating comment')
         await octokit.issues.createComment({
           ...context.repo,
           issue_number: context.issue.number,
