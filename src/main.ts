@@ -22,7 +22,7 @@ async function changeLogExists(octokit, pr):Promise<boolean> {
     ...toolkit.context.repo,
     pull_number: pr.number
   })
-  const changlelogFiles = files.data.filter(value => /change_log\/next\/*.yml/.test(value.filename))
+  const changlelogFiles = files.data.filter(value => /change_log\/.*\/*.yml/.test(value.filename))
 
   return changlelogFiles.length === 0
 }
