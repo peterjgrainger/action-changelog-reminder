@@ -3,10 +3,9 @@ import * as toolkit from '@actions/github';
 
 async function run() {
   try {
+    console.log(JSON.stringify(toolkit.context, null, 4));
     const octokit = new toolkit.GitHub(token())
     const pr = toolkit.context.payload.pull_request;
-
-  
     if(pr && await changeLogExists(octokit, pr) && await commentNotAlreadyThere(octokit)) {
       createComment(octokit)
     } else {
@@ -17,7 +16,7 @@ async function run() {
   }
 }
 
-async function changeLogExists(octokit, pr):Promise<boolean> {
+async function changeLogExists(octokit, pr) : Promise<boolean> {
   const files = await octokit.pulls.listFiles({
     ...toolkit.context.repo,
     pull_number: pr.number
@@ -27,7 +26,7 @@ async function changeLogExists(octokit, pr):Promise<boolean> {
   return changlelogFiles.length === 0
 }
 
-async function commentNotAlreadyThere(octokit: toolkit.GitHub) {
+async function commentNotAlreadyThere(octokit: toolkit.GitHub):Promise<boolean> {
   const comments = await octokit.issues.listComments({
     ...toolkit.context.repo,
     issue_number: toolkit.context.issue.number
@@ -36,7 +35,7 @@ async function commentNotAlreadyThere(octokit: toolkit.GitHub) {
   return comments.data.filter(comment => comment.body === missingChangelogContent()).length === 0;
 }
 
-async function createComment(octokit) {
+async function createComment(octokit: toolkit.GitHub): Promise<void> {
   await octokit.issues.createComment({
     ...toolkit.context.repo,
     issue_number: toolkit.context.issue.number,
@@ -44,7 +43,7 @@ async function createComment(octokit) {
   })
 }
 
-function token() {
+function token() : string {
   const token  = process.env.GITHUB_TOKEN
   if(!token) throw ReferenceError('No token defined in the environment variables')
 
