@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Changelog Reminder
-      uses: peterjgrainger/action-changelog-reminder@v1
+      uses: peterjgrainger/action-changelog-reminder@v1.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
