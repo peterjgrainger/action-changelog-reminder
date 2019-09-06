@@ -1,5 +1,5 @@
 name: 'Changelog Reminder'
-description: 'If there isn\'t a changelog in the PR add a comment to remind the committer'
+description: 'If there is not a changelog in the PR add a comment to remind the committer'
 author: 'GitHub'
 icon: 'check'
 color: 'green'
