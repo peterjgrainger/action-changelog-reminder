@@ -1,5 +1,5 @@
-name: 'Node 12 Template Action'
-description: 'Get started with Node actions'
+name: 'Changelog Reminder'
+description: 'If there isn\'t a changelog in the PR add a comment to remind the committer'
 author: 'GitHub'
 icon: 'check'
 color: 'green'
