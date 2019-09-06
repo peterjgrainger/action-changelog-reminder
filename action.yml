@@ -1,6 +1,8 @@
 name: 'Node 12 Template Action'
 description: 'Get started with Node actions'
 author: 'GitHub'
+icon: 'check'
+color: 'green'
 runs:
   using: 'node12'
   main: 'lib/main.js'
