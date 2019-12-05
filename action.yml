@@ -4,6 +4,9 @@ author: 'GitHub'
 branding:
   icon: 'check'
   color: 'green'
+inputs:
+  changelog_regex:
+    description: "A regex to match changelog file, default to 'change_log\/.*\/*.yml'"
 
 runs:
   using: 'node12'
