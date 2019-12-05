@@ -8,7 +8,7 @@ export async function changeLogReminder(Github: any, actionContext: Context, cor
   try {
     const octokit = new Github(githubToken())
     const pr = actionContext.payload.pull_request;
-    if(pr && await fileMissing(octokit, actionContext, pr.number) && await noDuplicateComment(octokit, actionContext, pr.number)) {
+    if(pr && await fileMissing(octokit, actionContext, pr.number, core) && await noDuplicateComment(octokit, actionContext, pr.number)) {
       await createComment(octokit, actionContext, actionContext.issue.number)
     } else {
       core.debug('PR or changelog doesn\'t exist');
@@ -17,5 +17,3 @@ export async function changeLogReminder(Github: any, actionContext: Context, cor
     core.setFailed(error.message);
   }
 }
-
-
