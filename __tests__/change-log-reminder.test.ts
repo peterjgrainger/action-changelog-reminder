@@ -12,7 +12,7 @@ describe('TODO - Add a test suite', () => {
   let apiParams;
   let changelogBody;
   let issue_number;
-  const fileList = { data: ['file'] }
+  const fileList = { data: [{filename: 'file'}] }
   const commentsList = { data: ['comment1', 'comment2'] }
 
   beforeEach(() => {
@@ -44,7 +44,8 @@ describe('TODO - Add a test suite', () => {
   beforeEach(() => {
     coreMock = {
       debug: jest.fn(),
-      setFailed: jest.fn()
+      setFailed: jest.fn(),
+      getInput: jest.fn(),
     }
 
     if(contextMock.payload.pull_request) {
@@ -61,12 +62,35 @@ describe('TODO - Add a test suite', () => {
     issue_number = contextMock.issue.number;
   })
 
+  describe('default regex is used when no changelog_regex is provided', () => {
+    it('checks changelog_regex input anyway', async () => {
+      await changeLogReminder(githubMock, contextMock, coreMock)
+      expect(coreMock.getInput).toBeCalledWith("changelog_regex")
+    })
+  })
+
+  describe('custom changelog_regex is provided', () => {
+    it('when there is a changelog matching the regex', async () => {
+      coreMock.getInput.mockReturnValue('file');
+      await changeLogReminder(githubMock, contextMock, coreMock)
+      expect(coreMock.getInput).toBeCalledWith("changelog_regex")
+      expect(octokitMock.issues.createComment).toHaveBeenCalledTimes(0)
+    })
+
+    it('when there is no changelog matching the regex', async () => {
+      coreMock.getInput.mockReturnValue('change');
+      await changeLogReminder(githubMock, contextMock, coreMock)
+      expect(coreMock.getInput).toBeCalledWith("changelog_regex")
+      expect(octokitMock.issues.createComment).toHaveBeenCalledWith({...changelogBody, issue_number, ...contextMock.repo})
+    })
+  })
+
   describe('changelog file is missing', () => {
     it('checks if file is missing from PR', async () => {
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(octokitMock.pulls.listFiles).toHaveBeenCalledWith(apiParams)
     })
-  
+
     it('checks if comment is already on PR', async () => {
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(octokitMock.pulls.listFiles).toHaveBeenCalledWith(apiParams)
@@ -80,14 +104,14 @@ describe('TODO - Add a test suite', () => {
 
   describe('change log is in pr doesn\'t create comment', () => {
     it('when there is a changelog in next', async() => {
-      const changelogInList = ['change_log/next/change.yml']
+      const changelogInList = [{filename: 'change_log/next/change.yml'}]
       octokitMock.pulls.listFiles.mockReturnValue(Promise.resolve(changelogInList))
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(octokitMock.issues.createComment).toHaveBeenCalledTimes(0)
     })
 
     it('when there is a changelog in releases', async() => {
-      const changelogInList = ['change_log/v1.2.3/change.yml']
+      const changelogInList = [{filename: 'change_log/v1.2.3/change.yml'}]
       octokitMock.pulls.listFiles.mockReturnValue(Promise.resolve(changelogInList))
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(octokitMock.issues.createComment).toHaveBeenCalledTimes(0)
