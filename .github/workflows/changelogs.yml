@@ -7,5 +7,7 @@ jobs:
     steps:
     - name: Changelog Reminder
       uses: peterjgrainger/action-changelog-reminder@v1.1.1
+      with:
+        changelog_regex: '/change_log\/.*\/*.yml'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
