@@ -6,6 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Changelog Reminder
-      uses: peterjgrainger/action-changelog-reminder@v1.1.1
+      uses: peterjgrainger/action-changelog-reminder@test-forking
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
