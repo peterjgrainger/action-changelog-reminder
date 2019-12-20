@@ -6,6 +6,7 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
+    "distribute": "ncc build lib/main.js",
     "test": "jest"
   },
   "repository": {
@@ -25,7 +26,8 @@
     "@actions/github": "2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "24.0.23",
+    "@zeit/ncc": "^0.20.5",
+    "@types/jest": "^24.0.23",
     "@types/node": "12.12.17",
     "jest": "24.9.0",
     "jest-circus": "24.9.0",

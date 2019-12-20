@@ -140,30 +140,37 @@ describe('TODO - Add a test suite', () => {
   })
 
   describe('setFailed called', () => {
+
+    let error;
+
+    beforeEach(()=> {
+      error = new Error('Async error')
+    })
+
     it('when there is no github token', async () => {
       githubMock = jest.fn().mockImplementation(() => {
-        throw Error('some error')
+        throw error
       })
       await changeLogReminder(githubMock, contextMock, coreMock)
-      expect(coreMock.setFailed).toHaveBeenCalledWith('some error')
+      expect(coreMock.setFailed).toHaveBeenCalledWith(error)
     })
 
     it('when listFiles api fails', async() => {
-      octokitMock.pulls.listFiles.mockRejectedValue(new Error('Async error'))
+      octokitMock.pulls.listFiles.mockRejectedValue(error)
       await changeLogReminder(githubMock, contextMock, coreMock)
-      expect(coreMock.setFailed).toHaveBeenCalledWith('Async error')
+      expect(coreMock.setFailed).toHaveBeenCalledWith(error)
     })
 
     it('when listComments api fails', async() => {
-      octokitMock.issues.listComments.mockRejectedValue(new Error('Async error'))
+      octokitMock.issues.listComments.mockRejectedValue(error)
       await changeLogReminder(githubMock, contextMock, coreMock)
-      expect(coreMock.setFailed).toHaveBeenCalledWith('Async error')
+      expect(coreMock.setFailed).toHaveBeenCalledWith(error)
     })
 
     it('when create comment api fails', async() => {
-      octokitMock.issues.createComment.mockRejectedValue(new Error('Async error'))
+      octokitMock.issues.createComment.mockRejectedValue(error)
       await changeLogReminder(githubMock, contextMock, coreMock)
-      expect(coreMock.setFailed).toHaveBeenCalledWith('Async error')
+      expect(coreMock.setFailed).toHaveBeenCalledWith(error)
     })
   })
 });
