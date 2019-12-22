@@ -1,7 +1,7 @@
 # GitHub action to add a changelog reminder
 
 After installation this action will check that the files in a pull request
-contain a changelog. If the changelog is not present, the action will create
+contain a changelog. If the changelog is not present,  the action will create
 the comment:
 
 ![changelog_comment](https://user-images.githubusercontent.com/1332395/64420560-76021d80-d097-11e9-936c-e1fc9e92fbfb.png)
