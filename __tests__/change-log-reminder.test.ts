@@ -3,7 +3,7 @@ import { changeLogReminder } from '../src/change-log-reminder'
 import { Context } from '@actions/github/lib/context';
 import {readFileSync} from 'fs'
 
-describe('TODO - Add a test suite', () => {
+describe('Change Log Reminder Test', () => {
 
   let githubMock: any;
   let contextMock: Context;
@@ -12,6 +12,8 @@ describe('TODO - Add a test suite', () => {
   let apiParams;
   let changelogBody;
   let issue_number;
+  let customRegexInput;
+  let customPrMessage;
   const fileList = { data: [{filename: 'file'}] }
   const commentsList = { data: ['comment1', 'comment2'] }
 
@@ -42,10 +44,23 @@ describe('TODO - Add a test suite', () => {
   })
 
   beforeEach(() => {
+    customPrMessage = undefined;
+    customRegexInput = undefined;
+  })
+
+  beforeEach(() => {
     coreMock = {
       debug: jest.fn(),
       setFailed: jest.fn(),
-      getInput: jest.fn(),
+      getInput: jest.fn(actionInput => {
+        if(actionInput === 'changelog_regex') {
+          return customRegexInput;
+        } else if(actionInput === 'customPrMessage') {
+          return customPrMessage;
+        } else {
+          throw new Error('Input not implemented')
+        }
+      }),
     }
 
     if(contextMock.payload.pull_request) {
@@ -71,17 +86,43 @@ describe('TODO - Add a test suite', () => {
 
   describe('custom changelog_regex is provided', () => {
     it('when there is a changelog matching the regex', async () => {
-      coreMock.getInput.mockReturnValue('file');
+      customRegexInput = 'file';
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(coreMock.getInput).toBeCalledWith("changelog_regex")
       expect(octokitMock.issues.createComment).toHaveBeenCalledTimes(0)
     })
 
     it('when there is no changelog matching the regex', async () => {
-      coreMock.getInput.mockReturnValue('change');
+      customRegexInput = 'change';
       await changeLogReminder(githubMock, contextMock, coreMock)
       expect(coreMock.getInput).toBeCalledWith("changelog_regex")
       expect(octokitMock.issues.createComment).toHaveBeenCalledWith({...changelogBody, issue_number, ...contextMock.repo})
+    })
+  })
+
+  describe('when custom PR message is provided', () => {
+
+    beforeEach(( () => {
+      customPrMessage = 'some custom message';
+    }))
+    it('gets the input', async() => {
+      await changeLogReminder(githubMock, contextMock, coreMock);
+      expect(coreMock.getInput).toBeCalledWith('customPrMessage')
+    })
+    
+    it('adds a custom message to the PR if not there', async() => {
+      const customBody = {
+        body: 'some custom message'
+      }
+      await changeLogReminder(githubMock, contextMock, coreMock);
+      expect(octokitMock.issues.createComment).toHaveBeenCalledWith({...customBody, issue_number, ...contextMock.repo})
+    })
+
+    it('does not add the same custom message twice', async() => {
+      const comments = ['some custom message']
+      octokitMock.issues.listComments.mockReturnValue(Promise.resolve(comments))
+      await changeLogReminder(githubMock, contextMock, coreMock)
+      expect(octokitMock.issues.createComment).toHaveBeenCalledTimes(0)
     })
   })
 
