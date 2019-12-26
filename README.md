@@ -27,9 +27,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Changelog Reminder
-      uses: peterjgrainger/action-changelog-reminder@v1.1.1
+      uses: peterjgrainger/action-changelog-reminder@v1.2.0
       with:
         changelog_regex: '/change_log\/.*\/*.yml'
+        customPrMessage: 'You broke regulation TO-67!'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
