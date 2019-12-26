@@ -7,6 +7,8 @@ branding:
 inputs:
   changelog_regex:
     description: "A regex to match changelog file, default to 'change_log\\/.*\\/*.yml'"
+  customPrMessage:
+    description: "Custom message to display if no changelong is found"
 
 runs:
   using: 'node12'
