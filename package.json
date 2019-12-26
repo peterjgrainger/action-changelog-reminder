@@ -5,8 +5,9 @@
   "description": "Github action to remind user that a changelog should be added to PR",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "rm -rf lib && tsc",
+    "test": "jest",
+    "dist": "rm -rf dist && ncc build lib/main.js"
   },
   "repository": {
     "type": "git",
