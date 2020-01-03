@@ -1,0 +1,13 @@
+on: [push]
+
+jobs:
+  compile-typescript:
+    runs-on: ubuntu-latest
+    name: compile all typescript files into one javascript file
+    steps:
+    - uses: actions/checkout@v1
+    - name: ncc
+      id: ncc-compile
+      uses: peterjgrainger/action-ncc@master
+      with:
+        entry-file: 'src/main.ts'
