@@ -6,8 +6,12 @@ jobs:
     name: compile all typescript files into one javascript file
     steps:
     - uses: actions/checkout@v1
-    - name: ncc
-      id: ncc-compile
-      uses: peterjgrainger/action-ncc@master
-      with:
-        entry-file: 'src/main.ts'
+    
+    - name: "Install ncc"
+      run: npm install --global ncc
+    
+    - name: "npm ci"
+      run: npm ci
+
+    - name: "npm run dist"
+      run: npm run dist
