@@ -12,3 +12,10 @@ jobs:
 
     - name: "npm run dist"
       run: npm run dist
+      
+    - name: "push compiled file"
+      uses: alexesprit/action-update-file@v0.1.0
+      with:
+        file-path: dist/index.js
+        commit-msg: Compile all ts into one file
+        github-token: ${{ secrets.GITHUB_TOKEN }}
