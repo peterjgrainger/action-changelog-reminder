@@ -7,9 +7,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - name: "Install ncc"
-      run: npm install --global ncc
-    
     - name: "npm ci"
       run: npm ci
 
