@@ -1,3 +1,4 @@
+name: "Compile typescript into one file"
 on:
   push:
     branches: 
