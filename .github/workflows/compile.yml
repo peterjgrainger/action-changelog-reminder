@@ -22,3 +22,12 @@ jobs:
         file-path: dist/index.js
         commit-msg: Compile all ts into one file
         github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test-action:
+    runs-on: ubuntu-latest
+    needs: [compile-typescript]
+    steps:
+    - name: Changelog Reminder
+      uses: peterjgrainger/action-changelog-reminder@v1.1.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
