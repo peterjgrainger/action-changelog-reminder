@@ -28,6 +28,6 @@ jobs:
     needs: [compile-typescript]
     steps:
     - name: Changelog Reminder
-      uses: peterjgrainger/action-changelog-reminder@v1.1.1
+      uses: peterjgrainger/action-changelog-reminder@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
