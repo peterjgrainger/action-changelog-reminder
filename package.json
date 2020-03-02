@@ -22,7 +22,7 @@
   "author": "peterjgrainger(peter@grainger.xyz)",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.2.0",
+    "@actions/core": "1.2.3",
     "@actions/github": "2.0.1"
   },
   "devDependencies": {
