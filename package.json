@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/jest": "24.9.0",
-    "@types/node": "12.12.25",
+    "@types/node": "12.12.30",
     "@zeit/ncc": "0.21.0",
     "jest": "25.1.0",
     "jest-circus": "25.1.0",
