@@ -29,8 +29,8 @@
     "@types/jest": "24.9.0",
     "@types/node": "12.12.25",
     "@zeit/ncc": "0.22.1",
-    "jest": "25.5.3",
-    "jest-circus": "25.5.3",
+    "jest": "25.5.4",
+    "jest-circus": "25.5.4",
     "ts-jest": "24.3.0",
     "typescript": "3.7.5"
   }
