@@ -30,7 +30,7 @@
     "@types/node": "12.12.25",
     "@zeit/ncc": "0.22.1",
     "jest": "25.5.3",
-    "jest-circus": "25.5.3",
+    "jest-circus": "26.0.1",
     "ts-jest": "24.3.0",
     "typescript": "3.7.5"
   }
