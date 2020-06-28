@@ -1,8 +1,8 @@
-import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
-import { missingChangelogContent } from "./missingChangelogContent";
+import {Octokit} from '@octokit/core/dist-types'
+import {RestEndpointMethods} from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types'
 
-export async function createComment(octokit: GitHub, actionContext: Context, issueNumber: number, newMessage: string): Promise<void> {
+export async function createComment(octokit: Octokit & RestEndpointMethods, actionContext: Context, issueNumber: number, newMessage: string): Promise<void> {
   await octokit.issues.createComment({
     ...actionContext.repo,
     issue_number: issueNumber,
