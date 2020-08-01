@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(131);
+/******/ 		return __webpack_require__(198);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -104,21 +104,6 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
-/***/ 48:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.missingChangelogContent = void 0;
-function missingChangelogContent(actionContext) {
-    return `@${actionContext.actor} your pull request is missing a changelog!`;
-}
-exports.missingChangelogContent = missingChangelogContent;
-
-
-/***/ }),
-
 /***/ 49:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -168,7 +153,7 @@ function onceStrict (fn) {
 
 /***/ }),
 
-/***/ 62:
+/***/ 82:
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
@@ -183,40 +168,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createComment = void 0;
-function createComment(octokit, actionContext, issueNumber, newMessage) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield octokit.issues.createComment(Object.assign(Object.assign({}, actionContext.repo), { issue_number: issueNumber, body: newMessage }));
-    });
-}
-exports.createComment = createComment;
-
-
-/***/ }),
-
-/***/ 71:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.noDuplicateComment = void 0;
-function noDuplicateComment(octokit, actionContext, prNumber, newMessage) {
+exports.existingComment = void 0;
+function existingComment(octokit, actionContext, prNumber, newMessage) {
     return __awaiter(this, void 0, void 0, function* () {
         const comments = yield octokit.issues.listComments(Object.assign(Object.assign({}, actionContext.repo), { issue_number: prNumber }));
-        return comments.data.filter(comment => comment.body === newMessage).length === 0;
+        return comments.data.filter(comment => comment.body === newMessage);
     });
 }
-exports.noDuplicateComment = noDuplicateComment;
+exports.existingComment = existingComment;
 
 
 /***/ }),
@@ -275,57 +234,6 @@ function getApiBaseUrl() {
 }
 exports.getApiBaseUrl = getApiBaseUrl;
 //# sourceMappingURL=utils.js.map
-
-/***/ }),
-
-/***/ 131:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const change_log_reminder_1 = __webpack_require__(488);
-const GitHub = __importStar(__webpack_require__(469));
-const github_1 = __webpack_require__(469);
-const core = __importStar(__webpack_require__(470));
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const token = process.env.GITHUB_TOKEN;
-        if (!token)
-            throw new Error('GITHUB_TOKEN environment variable not set. Read the docs.');
-        yield change_log_reminder_1.changeLogReminder(GitHub.getOctokit(token), github_1.context, core);
-    });
-}
-run();
-
 
 /***/ }),
 
@@ -597,6 +505,57 @@ if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
   debug = function() {};
 }
 exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 198:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const change_log_reminder_1 = __webpack_require__(567);
+const GitHub = __importStar(__webpack_require__(469));
+const github_1 = __webpack_require__(469);
+const core = __importStar(__webpack_require__(470));
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const token = process.env.GITHUB_TOKEN;
+        if (!token)
+            throw new Error('GITHUB_TOKEN environment variable not set. Read the docs.');
+        yield change_log_reminder_1.changeLogReminder(GitHub.getOctokit(token), github_1.context, core);
+    });
+}
+run();
 
 
 /***/ }),
@@ -1228,37 +1187,6 @@ const endpoint = withDefaults(null, DEFAULTS);
 
 exports.endpoint = endpoint;
 //# sourceMappingURL=index.js.map
-
-
-/***/ }),
-
-/***/ 392:
-/***/ (function(__unusedmodule, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fileMissing = void 0;
-const default_regex = /change_log\/.*\/*.yml/;
-function fileMissing(octokit, actionContext, prNumber, core) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const regex_str = core.getInput("changelog_regex");
-        const regex = regex_str ? new RegExp(regex_str) : default_regex;
-        const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber }));
-        const changlelogFiles = files.data.filter(value => regex.test(value.filename));
-        return changlelogFiles.length === 0;
-    });
-}
-exports.fileMissing = fileMissing;
 
 
 /***/ }),
@@ -3539,50 +3467,6 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 488:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeLogReminder = void 0;
-const noDuplicateComment_1 = __webpack_require__(71);
-const createComment_1 = __webpack_require__(62);
-const fileMissing_1 = __webpack_require__(392);
-const missingChangelogContent_1 = __webpack_require__(48);
-function changeLogReminder(octokit, actionContext, core) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const pr = actionContext.payload.pull_request;
-            const isFileMissing = pr && (yield fileMissing_1.fileMissing(octokit, actionContext, pr.number, core));
-            const newMessage = core.getInput('customPrMessage') || missingChangelogContent_1.missingChangelogContent(actionContext);
-            const hasNoDuplicateComment = pr && isFileMissing && (yield noDuplicateComment_1.noDuplicateComment(octokit, actionContext, pr.number, newMessage));
-            if (hasNoDuplicateComment) {
-                yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
-            }
-            else {
-                core.debug('PR or changelog doesn\'t exist');
-            }
-        }
-        catch (error) {
-            core.setFailed(error);
-        }
-    });
-}
-exports.changeLogReminder = changeLogReminder;
-
-
-/***/ }),
-
 /***/ 510:
 /***/ (function(module) {
 
@@ -4296,6 +4180,101 @@ class HttpClient {
     }
 }
 exports.HttpClient = HttpClient;
+
+
+/***/ }),
+
+/***/ 556:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createComment = void 0;
+function createComment(octokit, actionContext, issueNumber, newMessage) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield octokit.issues.createComment(Object.assign(Object.assign({}, actionContext.repo), { issue_number: issueNumber, body: newMessage }));
+    });
+}
+exports.createComment = createComment;
+
+
+/***/ }),
+
+/***/ 567:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.changeLogReminder = void 0;
+const noDuplicateComment_1 = __webpack_require__(82);
+const createComment_1 = __webpack_require__(556);
+const fileMissing_1 = __webpack_require__(867);
+const missingChangelogContent_1 = __webpack_require__(577);
+function changeLogReminder(octokit, actionContext, core // eslint-disable-line @typescript-eslint/no-explicit-any
+) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const pr = actionContext.payload.pull_request;
+            if (!pr) {
+                core.setFailed('This is not a pull request event');
+                return;
+            }
+            const isFileMissing = yield fileMissing_1.fileMissing(octokit, actionContext, pr.number, core);
+            const newMessage = core.getInput('customPrMessage') || missingChangelogContent_1.missingChangelogContent(actionContext);
+            const sameComment = yield noDuplicateComment_1.existingComment(octokit, actionContext, pr.number, newMessage);
+            if (isFileMissing && sameComment.length === 0) {
+                yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
+            }
+            else if (sameComment.length > 0) {
+                yield Promise.all(sameComment.map((comment) => __awaiter(this, void 0, void 0, function* () {
+                    yield octokit.issues.deleteComment(Object.assign(Object.assign({}, actionContext.repo), { comment_id: comment.id }));
+                })));
+            }
+            else {
+                core.debug("changelog doesn't exist");
+            }
+        }
+        catch (error) {
+            core.setFailed(error);
+        }
+    });
+}
+exports.changeLogReminder = changeLogReminder;
+
+
+/***/ }),
+
+/***/ 577:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.missingChangelogContent = void 0;
+function missingChangelogContent(actionContext) {
+    return `@${actionContext.actor} your pull request is missing a changelog!`;
+}
+exports.missingChangelogContent = missingChangelogContent;
 
 
 /***/ }),
@@ -5909,6 +5888,38 @@ function removeHook (state, name, method) {
 
   state.registry[name].splice(index, 1)
 }
+
+
+/***/ }),
+
+/***/ 867:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fileMissing = void 0;
+const default_regex = /change_log\/.*\/*.yml/;
+function fileMissing(octokit, actionContext, prNumber, core // eslint-disable-line @typescript-eslint/no-explicit-any
+) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const regex_str = core.getInput('changelog_regex');
+        const regex = regex_str ? new RegExp(regex_str) : default_regex;
+        const files = yield octokit.pulls.listFiles(Object.assign(Object.assign({}, actionContext.repo), { pull_number: prNumber }));
+        const changlelogFiles = files.data.filter(value => regex.test(value.filename));
+        return changlelogFiles.length === 0;
+    });
+}
+exports.fileMissing = fileMissing;
 
 
 /***/ }),
