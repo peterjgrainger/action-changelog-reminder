@@ -38,13 +38,17 @@ export async function changeLogReminder(
     )
 
     // The file is missing and there isn't already a comment in PR
-    if (isFileMissing && sameComment.length === 0) {
-      await createComment(
-        octokit,
-        actionContext,
-        actionContext.issue.number,
-        newMessage
-      )
+
+    if (isFileMissing) {
+      if (sameComment.length === 0) {
+        await createComment(
+          octokit,
+          actionContext,
+          actionContext.issue.number,
+          newMessage
+        )
+      }
+      // Change log found so remove identical comments.
     } else if (sameComment.length > 0) {
       await Promise.all(
         sameComment.map(async comment => {

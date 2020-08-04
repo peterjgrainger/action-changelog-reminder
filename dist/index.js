@@ -4242,8 +4242,11 @@ function changeLogReminder(octokit, actionContext, core) {
             const newMessage = core.getInput('customPrMessage') || missingChangelogContent_1.missingChangelogContent(actionContext);
             const sameComment = yield noDuplicateComment_1.existingComment(octokit, actionContext, pr.number, newMessage);
             // The file is missing and there isn't already a comment in PR
-            if (isFileMissing && sameComment.length === 0) {
-                yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
+            if (isFileMissing) {
+                if (sameComment.length === 0) {
+                    yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
+                }
+                // Change log found so remove identical comments.
             }
             else if (sameComment.length > 0) {
                 yield Promise.all(sameComment.map((comment) => __awaiter(this, void 0, void 0, function* () {
