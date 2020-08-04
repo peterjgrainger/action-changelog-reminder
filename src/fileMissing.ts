@@ -8,7 +8,7 @@ export async function fileMissing(
   octokit: Octokit & RestEndpointMethods,
   actionContext: Context,
   prNumber: number,
-  core: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  core: {getInput: (arg0: string) => string}
 ): Promise<boolean> {
   const regex_str = core.getInput('changelog_regex')
   const regex = regex_str ? new RegExp(regex_str) : default_regex

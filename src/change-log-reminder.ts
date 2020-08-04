@@ -9,7 +9,11 @@ import {RestEndpointMethods} from '@octokit/plugin-rest-endpoint-methods/dist-ty
 export async function changeLogReminder(
   octokit: Octokit & RestEndpointMethods,
   actionContext: Context,
-  core: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  core: {
+    getInput: (arg0: string) => string
+    setFailed: (arg0: string) => void
+    debug: (arg0: string) => void
+  }
 ): Promise<void> {
   try {
     const pr = actionContext.payload.pull_request
@@ -33,6 +37,7 @@ export async function changeLogReminder(
       newMessage
     )
 
+    // The file is missing and there isn't already a comment in PR
     if (isFileMissing && sameComment.length === 0) {
       await createComment(
         octokit,

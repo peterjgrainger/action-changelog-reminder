@@ -4230,8 +4230,7 @@ const noDuplicateComment_1 = __webpack_require__(82);
 const createComment_1 = __webpack_require__(556);
 const fileMissing_1 = __webpack_require__(867);
 const missingChangelogContent_1 = __webpack_require__(577);
-function changeLogReminder(octokit, actionContext, core // eslint-disable-line @typescript-eslint/no-explicit-any
-) {
+function changeLogReminder(octokit, actionContext, core) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const pr = actionContext.payload.pull_request;
@@ -4242,6 +4241,7 @@ function changeLogReminder(octokit, actionContext, core // eslint-disable-line @
             const isFileMissing = yield fileMissing_1.fileMissing(octokit, actionContext, pr.number, core);
             const newMessage = core.getInput('customPrMessage') || missingChangelogContent_1.missingChangelogContent(actionContext);
             const sameComment = yield noDuplicateComment_1.existingComment(octokit, actionContext, pr.number, newMessage);
+            // The file is missing and there isn't already a comment in PR
             if (isFileMissing && sameComment.length === 0) {
                 yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
             }
@@ -5909,8 +5909,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fileMissing = void 0;
 const default_regex = /change_log\/.*\/*.yml/;
-function fileMissing(octokit, actionContext, prNumber, core // eslint-disable-line @typescript-eslint/no-explicit-any
-) {
+function fileMissing(octokit, actionContext, prNumber, core) {
     return __awaiter(this, void 0, void 0, function* () {
         const regex_str = core.getInput('changelog_regex');
         const regex = regex_str ? new RegExp(regex_str) : default_regex;
