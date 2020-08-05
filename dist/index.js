@@ -4243,12 +4243,15 @@ function changeLogReminder(octokit, actionContext, core) {
             const sameComment = yield noDuplicateComment_1.existingComment(octokit, actionContext, pr.number, newMessage);
             // The file is missing and there isn't already a comment in PR
             if (isFileMissing) {
+                core.debug("changelog file is missing");
                 if (sameComment.length === 0) {
+                    core.debug("change log file is missing and comment has not already been made");
                     yield createComment_1.createComment(octokit, actionContext, actionContext.issue.number, newMessage);
                 }
                 // Change log found so remove identical comments.
             }
             else if (sameComment.length > 0) {
+                core.debug(`change log file exists, remove previous comments. ${sameComment.map(comment => comment.body).join(',')}`);
                 yield Promise.all(sameComment.map((comment) => __awaiter(this, void 0, void 0, function* () {
                     yield octokit.issues.deleteComment(Object.assign(Object.assign({}, actionContext.repo), { comment_id: comment.id }));
                 })));

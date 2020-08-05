@@ -40,7 +40,11 @@ export async function changeLogReminder(
     // The file is missing and there isn't already a comment in PR
 
     if (isFileMissing) {
+      core.debug('changelog file is missing')
       if (sameComment.length === 0) {
+        core.debug(
+          'change log file is missing and comment has not already been made'
+        )
         await createComment(
           octokit,
           actionContext,
@@ -50,6 +54,11 @@ export async function changeLogReminder(
       }
       // Change log found so remove identical comments.
     } else if (sameComment.length > 0) {
+      core.debug(
+        `change log file exists, remove previous comments. ${sameComment
+          .map(comment => comment.body)
+          .join(',')}`
+      )
       await Promise.all(
         sameComment.map(async comment => {
           await octokit.issues.deleteComment({
